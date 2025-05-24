@@ -1,0 +1,37 @@
+/* 전체 화면 */
+html, body, #map {
+  margin: 0; padding: 0;
+  width: 100%; height: 100%;
+  font-family: sans-serif;
+}
+
+/* 주소·반경 폼 */
+#controls {
+  position: absolute; top: 10px; left: 10px;
+  background: rgba(255,255,255,0.9); padding: 8px;
+  border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+#controls input, #controls button {
+  margin: 2px; font-size: 14px;
+}
+
+/* 우측 상단 통합 툴바 */
+#toolbar {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(255,255,255,0.9); padding: 8px;
+  border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 10;
+  display: flex; flex-direction: column;
+}
+#toolbar button {
+  width: 100px;
+  height: 30px;
+  margin: 4px 0;
+  font-size: 13px;
+  cursor: pointer;
+}
+#toolbar button[data-type="pilot"]    { background: #FFD700; }
+#toolbar button[data-type="observer"] { background: #90EE90; }
+#toolbar button[data-type="vertiport"]{ background: #87CEFA; }
+#toolbar button:hover { background: #eee; }
