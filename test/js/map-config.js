@@ -5,19 +5,18 @@ let drawingManager;
 let overlays = [];
 let placeMode = null;
 
-// DMS 문자열(예: "36°21′22″N127°20′51″E")을 {lat, lng} 십진수로 반환
+// DMS 문자열(예: "37° 35′ 33″ N 126° 42′ 49″ E")을 {lat, lng} 십진수로 반환
 function parseDMS(input) {
   const parts = input.match(
-    /(\d+)[°\s]+(\d+)[′']+(\d+)(?:[″"])?([NS])\s*(\d+)[°\s]+(\d+)[′']+(\d+)(?:[″"])?([EW])/i
+    /(\d+)\s*°\s*(\d+)\s*[′']\s*(\d+)\s*[″"]\s*([NS])\s+(\d+)\s*°\s*(\d+)\s*[′']\s*(\d+)\s*[″"]\s*([EW])/i
   );
   if (!parts) return null;
-  const [ , D1, M1, S1, dir1, D2, M2, S2, dir2 ] = parts;
-  const lat = ( +D1 + +M1/60 + +S1/3600 ) * (dir1.toUpperCase() === 'S' ? -1 : 1);
-  const lng = ( +D2 + +M2/60 + +S2/3600 ) * (dir2.toUpperCase() === 'W' ? -1 : 1);
+  const [, D1, M1, S1, dir1, D2, M2, S2, dir2] = parts;
+  const lat = (+D1 + +M1/60 + +S1/3600) * (dir1.toUpperCase() === 'S' ? -1 : 1);
+  const lng = (+D2 + +M2/60 + +S2/3600) * (dir2.toUpperCase() === 'W' ? -1 : 1);
   return { lat, lng };
 }
 
-// Google Maps API 로드 후 자동 호출
 function initMap() {
   // 1) 지도 초기화
   map = new google.maps.Map(document.getElementById('map'), {
@@ -27,7 +26,7 @@ function initMap() {
     zoomControl: true
   });
 
-  // 2) DrawingManager 초기화 (경로 그리기 전용)
+  // 2) DrawingManager 초기화 (경로 전용)
   drawingManager = new google.maps.drawing.DrawingManager({
     drawingMode: null,
     drawingControl: false,
@@ -155,8 +154,8 @@ function initMap() {
         else if (o.close) o.close();
       });
       overlays = [];
-      map.setOptions({ draggableCursor: null });
       resultDiv.textContent = '';
+      drawingManager.setDrawingMode(null);
       return;
     }
   });
@@ -197,8 +196,10 @@ function initMap() {
 
   // 8) ESC 키로 선 그리기 모드 종료
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' &&
-        drawingManager.getDrawingMode() === google.maps.drawing.OverlayType.POLYLINE) {
+    if (
+      e.key === 'Escape' &&
+      drawingManager.getDrawingMode() === google.maps.drawing.OverlayType.POLYLINE
+    ) {
       drawingManager.setDrawingMode(null);
       map.setOptions({ draggableCursor: null });
     }
