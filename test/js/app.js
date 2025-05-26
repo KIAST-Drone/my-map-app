@@ -5,26 +5,6 @@ let drawingManager;
 let overlays = [];
 let placeMode = null;
 
-// DMS 문자열(예: "37° 35′ 33″ N 126° 42′ 49″ E")을 {lat, lng} 십진수로 반환
-function parseDMS(input) {
-  // 전체 문자열에서 아래 패턴으로 매칭
-  //  - (\d+)\s*°\s*(\d+)\s*[′']\s*(\d+)\s*[″"]\s*([NS])
-  //  - \s+   (위도 방향과 경도 수 사이 공백)
-  //  - (\d+)\s*°\s*(\d+)\s*[′']\s*(\d+)\s*[″"]\s*([EW])
-  const parts = input.match(
-    /(\d+)\s*°\s*(\d+)\s*[′']\s*(\d+)\s*[″"]\s*([NS])\s+(\d+)\s*°\s*(\d+)\s*[′']\s*(\d+)\s*[″"]\s*([EW])/i
-  );
-  if (!parts) return null;
-  const [ ,
-    D1, M1, S1, dir1,
-    D2, M2, S2, dir2
-  ] = parts.map((v,i)=> i>0? v : null); // parts[1]..parts[8]
-
-  const lat = (+D1 + +M1/60 + +S1/3600) * (dir1.toUpperCase()==='S' ? -1 : 1);
-  const lng = (+D2 + +M2/60 + +S2/3600) * (dir2.toUpperCase()==='W' ? -1 : 1);
-
-  return { lat, lng };
-}
 
 function initMap() {
   // 1) 지도 초기화
